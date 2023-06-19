@@ -1,0 +1,54 @@
+version: '2'
+services:
+  api:
+    image: datascientest/fastapi:1.0.0
+    container_name: api
+    networks: 
+      - my_network_from_compose
+    ports: 
+      - "8000:8000"
+
+  authentication:
+    image: ilhemb/evaluation_docker_authentication:v19
+    depends_on:
+      - api    
+    container_name: authentication_test
+    networks: 
+      - my_network_from_compose
+    ports: 
+      - "8001:8000"
+    volumes:
+      - /home/ubuntu/shared_voulme:/app/data      
+    environment:
+      - LOG=1
+
+  authorization:
+    image: ilhemb/evaluation_docker_authorization:v19
+    depends_on:
+      - authentication        
+    container_name: authorization_test
+    networks: 
+      - my_network_from_compose
+    ports: 
+      - "8002:8000"
+    volumes:
+      - /home/ubuntu/shared_voulme:/app/data      
+    environment:
+      - LOG=1
+
+  content:
+    image: ilhemb/evaluation_docker_content:v19
+    depends_on:
+      - authorization        
+    container_name: content_test
+    networks: 
+      - my_network_from_compose
+    ports: 
+      - "8003:8000"
+    volumes:
+      - /home/ubuntu/shared_voulme:/app/data 
+    environment:
+      - LOG=1
+
+networks:
+  my_network_from_compose:

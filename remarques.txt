@@ -1,0 +1,31 @@
+Dans Dockerfile :
+
+J'ai du utiliser le fichier "requierements.txt"  lors du déploiement d'applications Python 
+pour répertorie les dépendances Python nécessaires à l'exécution de l'application.
+
+-------------------------------------
+
+Dans docker-compose.yml:
+J'ai dû ajouter ce code dans chaque container pour lancer les tests 
+séquentiellement, par ordre: api, puis authentification, puis autorisation, puis content
+
+depends_on:
+      - api    
+        container_name: authentication_test
+
+--------------------------------------
+
+Dans Dockerfile:
+J'ai dû ajouter un fichier "entrypoint.sh" pour chaque Dockerfile, qui contient les commandes
+ à exécuter dans Dockerfile parceque seulement la dernière commande qui s'exécute.
+
+J'ai ajouté ce code dans Dockerfile:
+    COPY entrypoint.sh /entrypoint.sh
+    RUN chmod +x /entrypoint.sh
+    CMD ["/entrypoint.sh"]
+
+----------------------------------------
+
+Dans Dockerfile:
+J'ai utilisé également sleep suivi des différents commandes pour laisser un temps pour l'exécution des tests, parceque j'ai eu
+ des problèmes dans le temps d'exécution.
